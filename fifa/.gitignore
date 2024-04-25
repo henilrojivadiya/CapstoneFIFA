@@ -1,0 +1,14 @@
+# Ignore database files
+*.sqlite3
+
+# Ignore Python bytecode files
+*.pyc
+
+# Ignore environment folder
+/fifa_env/
+
+# Ignore IDE files
+.vscode/
+.idea/
+*.pyc
+__pycache__/

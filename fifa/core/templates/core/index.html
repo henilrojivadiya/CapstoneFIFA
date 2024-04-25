@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FIFA World Cup Project</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+  <style>
+    body {
+      background-image: url('https://source.unsplash.com/1600x900/?soccer');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      color: white;
+      overflow-x: hidden;
+      /* Prevent horizontal scroll */
+    }
+
+    .container {
+      margin-top: 100px;
+    }
+
+    .form-container {
+      background-color: rgba(0, 0, 0, 0.6);
+      padding: 20px;
+      border-radius: 10px;
+    }
+
+    .form-label {
+      color: white;
+    }
+
+    .btn-primary {
+      background-color: #007bff;
+      border-color: #007bff;
+      transition: all 0.3s ease;
+    }
+
+    .btn-primary:hover {
+      background-color: #0056b3;
+      border-color: #0056b3;
+      transform: scale(1.05);
+    }
+
+    .nav-link {
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .nav-link:hover {
+      color: #ffc107;
+      /* Yellow color */
+    }
+
+    .tab-pane {
+      animation: fadeIn 1s ease;
+      /* Fade in animation */
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    /* Parallax effect */
+    .parallax {
+      background-image: url('https://source.unsplash.com/1600x900/?soccer');
+      background-size: cover;
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .parallax-overlay {
+      background-color: rgba(0, 0, 0, 0.5);
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .parallax h1 {
+      font-size: 5rem;
+      animation: slideInLeft 2s forwards;
+      /* Animation for sliding text */
+    }
+
+    @keyframes slideInLeft {
+      from {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* Countdown timer styles */
+    #countdown {
+      font-size: 2rem;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    .slide-animation {
+      animation: slideInLeft 1s forwards;
+    }
+
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Define animation for left-to-right */
+    @keyframes slideInLeft {
+      from {
+        opacity: 0;
+        transform: translateX(-100%);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    /* Apply animation to the page3Container */
+    .slideAnimationLeftToRight {
+      animation: slideInLeft 1s forwards;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Parallax Background with Text Overlay -->
+  <!-- <div class="parallax">
+    <div class="parallax-overlay">
+      <h1 class="text-center display-1 text-white">WorldSoccerStars</h1>
+    </div>
+  </div> -->
+  <!-- Page 1: Country Selection -->
+  {% if country_list %}
+  <div class="parallax">
+    <div class="parallax-overlay">
+      <h1 class="text-center display-1 text-white">Select Country</h1>
+    </div>
+  </div>
+
+  <div class="container">
+    <p><a class="btn btn-secondary" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+          <path
+            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+        </svg> Home</a></p>
+    <!-- <h1 class="text-center mb-5">FIFA World Cup Project</h1> -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="form-container slide-from-left">
+          {% if messages %}
+          {% for message in messages %}
+          {{message}}
+          {% endfor %}
+          {% endif %}
+          <form method="POST">{% csrf_token %}
+            <div class="mb-3">
+              <label for="countrySelect" class="form-label">Select your country:</label>
+              <select class="form-select" id="countrySelect" name="country_name" required>
+                <option disabled selected value="">Select Country</option>
+                <option disabled hidden></option> <!-- Hidden empty option -->
+                {% for country in country_list %}
+                <option value="{{country}}">{{country}}</option>
+                {% endfor %}
+                <!-- Add more countries as needed -->
+              </select>
+            </div>
+            <div class="d-grid gap-2">
+              <button type="submit" class="btn btn-dark">Next</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+  {%endif%}
+
+  <!-- Page_2 Start -->
+  <!-- Page_2 Start -->
+  {% if players_dict %}
+  <div class="parallax">
+    <div class="parallax-overlay">
+      <h1 class="text-center display-1 text-white">Select Formation and Players</h1>
+    </div>
+  </div>
+  <div class="container mt-5" id="page2Container">
+    <p><a class="btn btn-secondary" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+          <path
+            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+        </svg> Home</a></p>
+    <!-- <h2 class="text-center mb-4">FIFA World Cup Project - Page 2</h2> -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="form-container"> <!-- Added a container div -->
+          <form method="POST">{% csrf_token %}
+            <div class="mb-3">
+              <label for="teamSelect" class="form-label">Select Team Formation</label>
+              <select class="form-select" id="teamSelect" name="formation" required>
+                <option disabled selected value="">Team Formations</option>
+                <option disabled hidden></option> <!-- Hidden empty option -->
+                <option value="4,3,3,1">4 3 3 1</option>
+                <option value="5,3,2,1">5 3 2 1</option>
+                <!-- Add more teams as needed -->
+              </select>
+            </div>
+            <nav>
+              <div class="nav nav-tabs justify-content-center" id="nav-tab" role="tablist">
+                <button class="nav-link active" id="nav-tab1" data-bs-toggle="tab" data-bs-target="#tab1Content"
+                  type="button" role="tab" aria-controls="tab1Content" aria-selected="true">Striker</button>
+                <button class="nav-link" id="nav-tab2" data-bs-toggle="tab" data-bs-target="#tab2Content" type="button"
+                  role="tab" aria-controls="tab2Content" aria-selected="false">Midfielder</button>
+                <button class="nav-link" id="nav-tab3" data-bs-toggle="tab" data-bs-target="#tab3Content" type="button"
+                  role="tab" aria-controls="tab3Content" aria-selected="false">Defender</button>
+                <button class="nav-link" id="nav-tab4" data-bs-toggle="tab" data-bs-target="#tab4Content" type="button"
+                  role="tab" aria-controls="tab4Content" aria-selected="false">Goalkeeper</button>
+              </div>
+            </nav>
+            <div class="tab-content mt-3" id="nav-tabContent">
+              <div class="tab-pane fade show active" id="tab1Content" role="tabpanel" aria-labelledby="tab1">
+                <table class="table table-dark table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Player Name</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Credit</th>
+                      <th scope="col">Add to Team</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for player in players_dict.Striker %}
+                    <tr>
+                      <td>{{player.short_name}}</td>
+                      <td>{{player.player_positions}}</td>
+                      <td>{{player.credit}}</td>
+                      <td><input type="checkbox" class="btn-check" name="selected_players" value="{{player.short_name}}"
+                          id="btn-check-{{player.short_name}}" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="btn-check-{{player.short_name}}">Add</label>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <div class="text-center mt-3">
+                  <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-dark"
+                      onclick="document.getElementById('nav-tab2').click()">Next</button>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="tab2Content" role="tabpanel" aria-labelledby="tab2">
+                <table class="table table-dark table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Player Name</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Credit</th>
+                      <th scope="col">Add to Team</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for player in players_dict.Midfielder %}
+                    <tr>
+                      <td>{{player.short_name}}</td>
+                      <td>{{player.player_positions}}</td>
+                      <td>{{player.credit}}</td>
+                      <td><input type="checkbox" class="btn-check" name="selected_players" value="{{player.short_name}}"
+                          id="btn-check-{{player.short_name}}" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="btn-check-{{player.short_name}}">Add</label>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <div class="text-center mt-3">
+                  <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-dark"
+                      onclick="document.getElementById('nav-tab3').click()">Next</button>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="tab3Content" role="tabpanel" aria-labelledby="tab3">
+                <table class="table table-dark table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Player Name</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Credit</th>
+                      <th scope="col">Add to Team</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for player in players_dict.Defender %}
+                    <tr>
+                      <td>{{player.short_name}}</td>
+                      <td>{{player.player_positions}}</td>
+                      <td>{{player.credit}}</td>
+                      <td><input type="checkbox" class="btn-check" name="selected_players" value="{{player.short_name}}"
+                          id="btn-check-{{player.short_name}}" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="btn-check-{{player.short_name}}">Add</label>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <div class="text-center mt-3">
+                  <div class="d-grid gap-2">
+                    <button type="button" class="btn btn-dark"
+                      onclick="document.getElementById('nav-tab4').click()">Next</button>
+                  </div>
+                </div>
+              </div>
+              <div class="tab-pane fade" id="tab4Content" role="tabpanel" aria-labelledby="tab4">
+                <table class="table table-dark table-hover">
+                  <thead>
+                    <tr>
+                      <th scope="col">Player Name</th>
+                      <th scope="col">Position</th>
+                      <th scope="col">Credit</th>
+                      <th scope="col">Add to Team</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {% for player in players_dict.Goalkeeper %}
+                    <tr>
+                      <td>{{player.short_name}}</td>
+                      <td>{{player.player_positions}}</td>
+                      <td>{{player.credit}}</td>
+                      <td><input type="checkbox" class="btn-check" name="selected_players" value="{{player.short_name}}"
+                          id="btn-check-{{player.short_name}}" autocomplete="off">
+                        <label class="btn btn-outline-secondary" for="btn-check-{{player.short_name}}">Add</label>
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </tbody>
+                </table>
+                <div class="text-center mt-3">
+                  <div class="d-grid gap-2">
+                    <button type="submit" class="btn btn-dark">Next</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {%endif%}
+  <!-- Page_2 End -->
+
+  {% if remaining_players %}
+  <div class="parallax">
+    <div class="parallax-overlay">
+      <h1 class="text-center display-1 text-white">Select Substitutes</h1>
+    </div>
+  </div>
+  <div class="container">
+    <p><a class="btn btn-secondary" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+          <path
+            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+        </svg> Home</a></p>
+    <!-- <h1 class="text-center mb-5">FIFA World Cup Project</h1> -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="form-container slide-from-left">
+          <form method="POST">{% csrf_token %}
+            <div class="table-responsive">
+              <table class="table table-dark table-hover">
+                <thead>
+                  <tr>
+                    <th scope="col">Player Name</th>
+                    <th scope="col">Position</th>
+                    <th scope="col">Credit</th>
+                    <th scope="col">Add to Team</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {% for player in remaining_players %}
+                  <tr>
+                    <td>{{player.short_name}}</td>
+                    <td>{{player.player_positions}}</td>
+                    <td>{{player.credit}}</td>
+                    <td><input type="checkbox" class="btn-check" name="selected_sub_players"
+                        value="{{player.short_name}}" id="btn-check-{{player.short_name}}" autocomplete="off">
+                      <label class="btn btn-outline-secondary" for="btn-check-{{player.short_name}}">Add</label>
+                    </td>
+                  </tr>
+                  {% endfor %}
+                </tbody>
+              </table>
+              <div class="text-center mt-3">
+                <div class="d-grid gap-2">
+                  <button type="submit" class="btn btn-dark">Submit</button>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%endif%}
+  <!-- Page 3: Player Selection -->
+  {%if ultimate_team%}
+  <div class="parallax">
+    <div class="parallax-overlay">
+      <h1 class="text-center display-1 text-white">Your Ultimate Team</h1>
+    </div>
+  </div>
+  <div class="container mt-5" id="page3Container" style="opacity: 0; transition: opacity 1s; margin-bottom: 50px;">
+    <p><a class="btn btn-secondary" href="/"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+          fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
+          <path
+            d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5" />
+        </svg> Home</a></p>
+    <!-- <h2 class="text-center mb-4">FIFA World Cup Project - Page 3</h2> -->
+    <div class="row justify-content-center">
+      <div class="col-md-6">
+        <div class="form-container"> <!-- Added a container div -->
+          <table class="table table-dark table-hover">
+            <thead>
+              <tr>
+                <th scope="col">Player Name</th>
+                <th scope="col">Position</th>
+                <th scope="col">Credit</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for player in selected_players %}
+              <tr>
+                <td>{{player.short_name}}</td>
+                <td>{{player.player_positions}}</td>
+                <td>{{player.credit}}</td>
+              </tr>
+              {% endfor %}
+              {% for player in selected_sub_players %}
+              <tr>
+                <td>{{player.short_name}}</td>
+                <td>{{player.player_positions}}</td>
+                <td>{{player.credit}}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {%endif%}
+  <!-- Page 3 close -->
+
+  <!-- Footer -->
+  <!-- Footer -->
+  <footer class="footer mt-auto py-3 bg-dark text-white" style="opacity: 0.7;">
+    <div class="container text-center">
+      <span>© 2024 FIFA World Cup Project. All rights reserved.</span>
+    </div>
+  </footer>
+  <!-- Script to trigger animation for Page 3 when Page 1 and Page 2 animations are likely completed -->
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+    crossorigin="anonymous"></script>
+  <script>
+    // Function to scroll to next page after a certain time interval
+    setTimeout(function () {
+      window.scrollTo({
+        top: window.innerHeight,
+        behavior: 'smooth'
+      });
+    }, 3000); // Change 3000 to the time interval in milliseconds (e.g., 4000 for 4 seconds)
+  </script>
+  <script>
+    window.addEventListener('scroll', function () {
+      var formContainer = document.querySelector('.slide-from-left');
+      var scrollPosition = window.scrollY;
+
+      // Adjust the scroll threshold as needed
+      if (scrollPosition > 200) {
+        formContainer.classList.add('slide-animation');
+      }
+    });
+  </script>
+  <script>
+    // Function to trigger animation for Page 2
+    function nextPageAnimation() {
+      const page2Container = document.getElementById('page2Container');
+      // Add CSS class to apply animation
+      page2Container.classList.add('slide-animation');
+    }
+
+    // Intersection Observer to trigger animation when user scrolls to Page 2
+    const options = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.5 // Trigger animation when 50% of Page 2 is visible
+    };
+
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          nextPageAnimation();
+          observer.unobserve(entry.target);
+        }
+      });
+    }, options);
+
+    // Target Page 2 container
+    const page2Container = document.getElementById('page2Container');
+    // Start observing
+    observer.observe(page2Container);
+  </script>
+  <script>
+    // Function to handle the animation for page 3 with a delay
+    function animatePage3WithDelay() {
+      const page3Container = document.getElementById('page3Container');
+      // Apply a delay before adding the animation class
+      setTimeout(() => {
+        page3Container.style.opacity = '1';
+        page3Container.classList.add('slideAnimationLeftToRight');
+      }, 2000); // Adjust the delay (in milliseconds) as needed
+    }
+
+    // Call the function to animate page 3 when the window loads
+    window.onload = function () {
+      animatePage3WithDelay();
+    };
+  </script>
+</body>
+
+</html>
